@@ -1,0 +1,11 @@
+# View a list of X windows
+/usr/bin/{gawk,sed,xlsclients} rix,
+
+# Config files in ~/.config/waybar/ are symlinks to these files
+owner @{HOME}/repos/dotfiles/waybar/.config/.config/waybar/{,**} r,
+owner @{HOME}/repos/dotfiles/gtk-3.0/.config/gtk-3.0/{,*} r,
+
+# I want to cat files from here in a module
+/usr/bin/cat rix,
+owner @{HOME}/.cache/update_mailboxes_status r,
+owner @{HOME}/.cache/unread_mail/{,**} r,

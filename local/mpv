@@ -1,0 +1,5 @@
+# I want to view files here
+owner /mnt/share/{,**} r,
+owner /mnt/idrive/{,**} r,
+owner @{HOME}/repos/dotfiles/mpv/.config/.config/mpv/{,**} rw,
+owner /home/*/repos/dotfiles/mpv/.config/mpv/watch_later/** w,

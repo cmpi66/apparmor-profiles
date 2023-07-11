@@ -1,0 +1,14 @@
+abi <abi/3.0>,
+
+include <tunables/global>
+
+/usr/bin/gammastep {
+  include <abstractions/base>
+
+  /usr/bin/gammastep mr,
+  owner /home/*/repos/dotfiles/gammastep/.config/gammastep/config.ini r,
+  owner /run/user/*/* r,
+  owner /run/user/*/* w,
+
+}
+

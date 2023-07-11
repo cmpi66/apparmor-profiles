@@ -1,0 +1,165 @@
+abi <abi/3.0>,
+
+include <tunables/global>
+include <tunables/xdg-user-dirs>
+
+# AppArmor profile for librewolf browser
+# Version of librewolf profiled: 114.0b4
+# This profile should work on Developer Edition and Nightly as well
+# Homepage: https://github.com/krathalan/apparmor-profiles
+# Copyright 2019-2023 (C) krathalan, mortezadadgar; Licensed under GPLv3
+# Forked from https://gitlab.com/madaidan/apparmor-profiles, provided without
+# license
+
+
+profile librewolf /{usr/bin,usr/lib/librewolf*}/librewolf* {
+  include <abstractions/audio>
+  include <abstractions/base>
+  include <abstractions/bash>
+  include <abstractions/consoles>
+  include <abstractions/enchant>
+  include <abstractions/fonts>
+  include <abstractions/krathalans-common-gui>
+  include <abstractions/krathalans-downloads>
+  include <abstractions/krathalans-hwaccel>
+  include <abstractions/krathalans-networking>
+  include <abstractions/php-worker>
+  include <abstractions/xdg-open>
+  include if exists <local/librewolf>
+
+  deny capability sys_ptrace,
+
+  capability sys_admin,
+  capability sys_chroot,
+
+  network inet dgram,
+  network inet stream,
+  network inet6 dgram,
+  network inet6 stream,
+  network netlink raw,
+
+  ptrace trace peer=librewolf,
+
+  deny /etc/mailcap r,
+  deny /home/*/dl/void-live-x86_64-20221001-base.iso r,
+  deny /var/cache/ w,
+  deny @{PROC}/sys/kernel/random/boot_id r,
+  deny @{system_share_dirs}/applications/{,**} r,
+  deny @{user_share_dirs}/applications/ r,
+  deny owner /home/*/.gitconfig r,
+  deny owner /home/*/.mozilla/firefox/profiles.ini r,
+  deny owner /home/*/.nix-channels r,
+  deny owner /home/*/Downloads/ w,
+  deny owner /home/*/copywriting/ r,
+  deny owner /home/*/media/ r,
+  deny owner /home/*/repos/ r,
+  deny owner /home/*/repos/privatefiles/documents/docs/ r,
+
+  /dev/ r,
+  /dev/hidraw0 rw,
+  /dev/hidraw1 rw,
+  /dev/hidraw2 rw,
+  /dev/video5 rw,
+  /etc/libva.conf r,
+  /etc/udev/udev.conf r,
+  /home/chris/repos/dotfiles/scriptsn/.local/bin/transadd mrix,
+  /opt/intel/mediasdk/lib/libmfx.so.* mr,
+  /proc/ r,
+  /proc/sys/dev/i915/perf_stream_paranoid r,
+  /proc/uptime r,
+  /sys/bus/ r,
+  /sys/bus/pci/devices/ r,
+  /sys/class/ r,
+  /sys/class/hidraw/ r,
+  /sys/fs/cgroup/cpu/cpu.cfs_quota_us r,
+  /tmp/{,**} rwlk,
+  /usr/bin/env mrix,
+  /usr/bin/keepassxc-proxy mrix,
+  /usr/bin/notify-send mrix,
+  /usr/bin/pidof mrix,
+  /usr/bin/transmission-daemon mrix,
+  /usr/bin/transmission-remote mrix,
+  /usr/bin/{bash,dash} rix,
+  /usr/lib/firefox/glxtest mrix,
+  /usr/lib/gio-launch-desktop mrix,
+  /usr/lib/librewolf*/glxtest rCx,
+  /usr/lib/librewolf*/vaapitest rCx,
+  /usr/lib/librewolf*/{,**} r,
+  /{usr/bin,usr/lib/librewolf*}/librewolf* mrpx,
+  @{PROC}/@{pid}/task/[0-9]*/{comm,stat} r,
+  @{PROC}/@{pid}/{comm,cmdline,cgroup,environ,mountinfo,smaps,statm,stat} r,
+  @{PROC}/@{pid}/{fd,task}/ r,
+  @{PROC}/@{pid}/{oom_score_adj,setgroups,gid_map,uid_map} w,
+  @{system_share_dirs}/ r,
+  @{system_share_dirs}/glib-[0-9]*/schemas/gschemas.compiled r,
+  @{system_share_dirs}/poppler/{,**} r,
+  @{sys}/devices/pci[0-9]*/**/drm/{,**} r,
+  @{sys}/devices/pci[0-9]*/**/{irq,resource,revision,config,uevent} r,
+  @{sys}/devices/pci[0-9]*/[0-9]*/ r,
+  @{sys}/devices/pci[0-9]*/[0-9]*/**/[0-9]*/ r,
+  @{sys}/devices/system/cpu/cpu[0-9]*/cache/index[0-9]*/size r,
+  @{sys}/devices/system/cpu/cpufreq/policy[0-9]*/cpuinfo_max_freq r,
+  @{sys}/devices/system/cpu/present r,
+  owner /dev/shm/org.mozilla.{,ipc.}* rw,
+  owner /dev/shm/shmfd-* rw,
+  owner /dev/shm/wayland.mozilla.ipc.* rw,
+  owner /home/*/ r,
+  owner /home/*/.config/pulse w,
+  owner /home/*/.config/transmission-daemon/** rw,
+  owner /home/*/.librewolf/profiles.ini r,
+  owner /home/*/repos/dotfiles/applications/.local/share/applications/ r,
+  owner /home/*/repos/dotfiles/applications/.local/share/applications/** r,
+  owner /home/*/repos/dotfiles/fontconfig/.config/fontconfig/fonts.conf r,
+  owner /home/*/repos/dotfiles/fonts/.local/share/fonts/ r,
+  owner /home/*/repos/dotfiles/fonts/.local/share/fonts/** r,
+  owner /home/*/repos/dotfiles/gtk-3.0/.config/gtk-3.0/settings.ini r,
+  owner /home/*/repos/dotfiles/mime/.config/mimeapps.list r,
+  owner /home/*/repos/dotfiles/pulse/.config/pulse/cookie k,
+  owner /home/*/repos/dotfiles/pulse/.config/pulse/cookie rw,
+  owner /home/*/repos/dotfiles/user-dirs/.config/user-dirs.dirs r,
+  owner /run/user/*/dconf/ w,
+  owner /run/user/*/dconf/user rw,
+  owner /run/user/1000/app/ w,
+  owner /run/user/1000/app/org.keepassxc.KeePassXC/ w,
+  owner /run/user/1000/org.keepassxc.KeePassXC.BrowserServer w,
+  owner @{HOME}/.cache/librewolf/{,**} rwlk,
+  owner @{HOME}/.config/dconf/user r,
+  owner @{HOME}/.librewolf/{,**} rwlk,
+
+
+  profile librewolf-glxtest /usr/lib/librewolf*/glxtest {
+    include <abstractions/base>
+    include <abstractions/krathalans-hwaccel>
+    include <abstractions/nameservice>
+    include if exists <local/librewolf-glxtest>
+
+    deny /etc/{nsswitch.conf,passwd} r,
+
+    /tmp/librewolf*/.parentlock w,
+    @{HOME}/.librewolf/*/.parentlock w,
+    @{system_share_dirs}/libdrm/amdgpu.ids r,
+    @{sys}/bus/pci/devices/ r,
+    @{sys}/devices/pci[0-9]*/**/drm/ r,
+    @{sys}/devices/pci[0-9]*/**/{class,device,vendor} r,
+    owner @{HOME}/.{ICE,X}authority r,
+
+  }
+
+  profile librewolf-vaapitest /usr/lib/librewolf*/vaapitest {
+    include <abstractions/base>
+    include <abstractions/krathalans-hwaccel>
+    include if exists <local/librewolf-vaapitest>
+
+    deny network netlink raw,
+
+    deny /etc/igfx* w,
+
+    /etc/libva.conf r,
+    /tmp/librewolf*/.parentlock w,
+    @{HOME}/.cache/librewolf/*/startupCache/*.{bin,little} r,
+    @{HOME}/.librewolf/*/.parentlock w,
+    @{HOME}/.librewolf/*/gmp-gmpopenh264/{,**} r,
+    @{sys}/devices/pci[0-9]*/[0-9]*/{irq,resource} r,
+
+  }
+}

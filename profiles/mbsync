@@ -1,0 +1,65 @@
+# AppArmor profile for mbsync/isync IMAP mailbox synchronizer
+# Version of program profiled: 1.4.4
+# Homepage: https://github.com/krathalan/apparmor-profiles
+# Copyright 2020-2021 (C) krathalan; Licensed under GPLv3
+
+
+abi <abi/3.0>,
+
+
+
+include <tunables/global>
+
+# AppArmor profile for mbsync/isync IMAP mailbox synchronizer
+# Version of program profiled: 1.4.4
+# Homepage: https://github.com/krathalan/apparmor-profiles
+# Copyright 2020-2021 (C) krathalan; Licensed under GPLv3
+
+
+profile mbsync /usr/bin/mbsync {
+  include <abstractions/base>
+  include <abstractions/bash>
+  include <abstractions/consoles>
+  include <abstractions/krathalans-networking>
+  include <abstractions/ssl_certs>
+  include if exists <local/mbsync>
+
+  network inet dgram,
+  network inet stream,
+  network inet6 dgram,
+  network inet6 stream,
+  network netlink raw,
+
+  /usr/bin/base64 mrix,
+  /usr/bin/bash mrix,
+  /usr/bin/dash rix,
+  /usr/bin/env ix,
+  /usr/bin/getopt mrix,
+  /usr/bin/gpg rCx,
+  /usr/bin/pass mrix,
+  /usr/bin/which mrix,
+  owner @{HOME}/.config/mbsync/config r,
+  owner @{HOME}/.local/share/mail/{,**} rw,
+  owner @{HOME}/.local/share/mail/{,**}/{.mbsyncstate.lock,.uidvalidity} k,
+
+
+  profile gpg /usr/bin/gpg {
+    include <abstractions/base>
+    include <abstractions/gnupg>
+    include if exists <local/mbsync-gpg>
+
+    deny network inet6 stream,
+
+    network inet stream,
+
+    /usr/bin/gpg r,
+    owner /home/*/.local/share/.password-store/ r,
+    owner /home/*/.local/share/.password-store/** r,
+    owner /home/*/.local/share/gnupg/pubring.kbx r,
+    owner @{HOME}/.local/share/gnupg/*lk* rwl,
+    owner @{HOME}/.local/share/gnupg/gpg.conf r,
+    owner @{HOME}/.local/share/gnupg/pubring.kbx.{lock,tmp} rwl,
+    owner @{HOME}/.local/share/gnupg/random_seed k,
+
+  }
+}

@@ -1,0 +1,76 @@
+
+abi <abi/3.0>,
+
+include <tunables/global>
+
+/usr/lib/libreoffice/program/soffice {
+  include <abstractions/base>
+  include <abstractions/bash>
+  include <abstractions/consoles>
+  include <abstractions/dbus-session-strict>
+  include <abstractions/gnome>
+  include <abstractions/krathalans-networking>
+  include <abstractions/nameservice>
+  include <abstractions/ubuntu-browsers.d/java>
+  include <abstractions/ubuntu-browsers.d/ubuntu-integration>
+  include <abstractions/user-tmp>
+
+  deny /proc/*/net/if_inet6 r,
+  deny owner /home/*/.gitconfig r,
+  deny owner /home/*/.mozilla/firefox/profiles.ini r,
+  deny owner /home/*/.nix-channels r,
+  deny owner /proc/*/coredump_filter rw,
+  deny owner /proc/*/fd/ r,
+  deny owner /proc/*/mountinfo r,
+
+  /etc/fstab r,
+  /etc/group r,
+  /etc/libreoffice/bootstraprc r,
+  /etc/libreoffice/psprint.conf r,
+  /etc/libreoffice/sofficerc r,
+  /etc/paperspecs r,
+  /etc/passwd r,
+  /proc/cgroups r,
+  /sys/devices/system/cpu/cpu0/microcode/version r,
+  /usr/bin/basename mrix,
+  /usr/bin/bash ix,
+  /usr/bin/dbus-launch mrix,
+  /usr/bin/dirname mrix,
+  /usr/bin/gpg mrix,
+  /usr/bin/gpgconf mrix,
+  /usr/bin/gpgsm mrix,
+  /usr/bin/grep mrix,
+  /usr/bin/paperconf mrix,
+  /usr/bin/sed mrix,
+  /usr/bin/uname mrix,
+  /usr/lib/jvm/java-20-openjdk/bin/java mrix,
+  /usr/lib/libreoffice/program/javaldx mrix,
+  /usr/lib/libreoffice/program/oosplash mrix,
+  /usr/lib/libreoffice/program/soffice r,
+  /usr/lib/libreoffice/program/soffice.bin mrix,
+  /usr/share/icons/default/index.theme r,
+  /usr/share/libexttextcat/es.lm r,
+  /usr/share/libexttextcat/fpdb.conf r,
+  /usr/share/libexttextcat/zh-Hans.lm r,
+  /usr/share/liblangtag/common/supplemental/supplementalMetadata.xml r,
+  /usr/share/liblangtag/language-subtag-registry.xml r,
+  /usr/share/mythes/ r,
+  owner "/home/*/.~lock.Untitled 1.docx#" w,
+  owner /home/*/ r,
+  owner /home/*/.Xauthority r,
+  owner /home/*/.config/dconf/user r,
+  owner /home/*/.config/libreoffice/** rwk,
+  owner /home/*/.local/share/gnupg/gpg.conf r,
+  owner /home/*/lu3886o47.tmp w,
+  owner /home/*/media/** rwk,
+  owner /home/*/repos/dotfiles/fontconfig/.config/fontconfig/fonts.conf r,
+  owner /home/*/repos/dotfiles/fonts/.local/share/fonts/ r,
+  owner /home/*/repos/dotfiles/fonts/.local/share/fonts/** r,
+  owner /home/*/repos/dotfiles/gtk-3.0/.config/gtk-3.0/settings.ini r,
+  owner /home/*/repos/dotfiles/office/.config/libreoffice/** rwk,
+  owner /home/*/repos/dotfiles/user-dirs/.config/user-dirs.dirs r,
+  owner /proc/*/cgroup r,
+  owner /run/user/1000/dconf/ w,
+  owner /{usr/,}lib{,32,64}/** rw,
+
+}

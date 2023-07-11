@@ -1,0 +1,114 @@
+# Last Modified: Tue Jul 11 08:06:14 2023
+abi <abi/3.0>,
+
+include <tunables/global>
+
+# AppArmor profile for waybar system bar for Wayland
+# Version of waybar profiled: 0.9.17
+# Homepage: https://github.com/krathalan/apparmor-profiles
+# Copyright 2019-2021 (C) krathalan; Licensed under GPLv3
+
+
+profile waybar /usr/bin/waybar {
+  include <abstractions/audio>
+  include <abstractions/base>
+  include <abstractions/bash>
+  include <abstractions/consoles>
+  include <abstractions/dconf>
+  include <abstractions/fonts>
+  include <abstractions/krathalans-common-gui>
+  include <abstractions/krathalans-networking>
+  include <abstractions/nameservice>
+  include <abstractions/php-worker>
+  include <abstractions/ubuntu-konsole>
+  include <abstractions/wayland>
+  include if exists <local/waybar>
+
+  network netlink raw,
+  network unix stream,
+
+  deny ptrace read peer=/usr/bin/gammastep,
+  deny ptrace read peer=/usr/lib/libreoffice/program/soffice,
+  deny ptrace read peer=firefox,
+  deny ptrace read peer=librewolf,
+  deny ptrace read peer=librewolf//librewolf-glxtest,
+  deny ptrace read peer=mbsync,
+  deny ptrace read peer=mbsync//gpg,
+  deny ptrace read peer=mpv,
+  deny ptrace read peer=ssh,
+  deny ptrace read peer=syncthing,
+  deny ptrace read peer=unconfined,
+  deny ptrace read peer=wl-copy-paste,
+  deny ptrace read peer=wl-copy-paste//xdg-mime,
+
+  deny /dev/rfkill r,
+  deny /dev/tty* rw,
+  deny @{PROC}/*/net/dev r,
+
+  /etc/pacman.conf r,
+  /etc/pacman.d/mirrorlist r,
+  /etc/pacman.d/mirrorlist-arch r,
+  /home/chris/repos/dotfiles/scriptsn/.local/bin/slstatus/internet.sh mrix,
+  /home/chris/repos/dotfiles/scriptsn/.local/bin/slstatus/mail.sh mrix,
+  /home/chris/repos/dotfiles/scriptsn/.local/bin/slstatus/music.sh mrix,
+  /home/chris/repos/dotfiles/scriptsn/.local/bin/slstatus/pacpackages.sh mrix,
+  /home/chris/repos/dotfiles/scriptsn/.local/bin/slstatus/torrent.sh mrix,
+  /proc/ r,
+  /proc/*/cmdline r,
+  /proc/*/net/wireless r,
+  /proc/*/stat r,
+  /proc/uptime r,
+  /sys/bus/ r,
+  /sys/class/ r,
+  /sys/class/backlight/ r,
+  /sys/class/net/ r,
+  /sys/class/power_supply/ r,
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0003:00/power_supply/AC/online r,
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/capacity r,
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/charge_full r,
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/charge_full_design r,
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/charge_now r,
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/current_now r,
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/status r,
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/type r,
+  /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/voltage_now r,
+  /sys/devices/pci0000:00/0000:00:02.0/drm/card0/card0-eDP-1/intel_backlight/actual_brightness r,
+  /sys/devices/pci0000:00/0000:00:02.0/drm/card0/card0-eDP-1/intel_backlight/bl_power r,
+  /sys/devices/pci0000:00/0000:00:02.0/drm/card0/card0-eDP-1/intel_backlight/max_brightness r,
+  /sys/devices/pci0000:00/0000:00:14.3/net/wlan0/operstate r,
+  /sys/devices/virtual/thermal/thermal_zone8/temp r,
+  /usr/bin/find mrix,
+  /usr/bin/grep mrix,
+  /usr/bin/mpc mrix,
+  /usr/bin/pacman mrix,
+  /usr/bin/paste mrix,
+  /usr/bin/pidof mrix,
+  /usr/bin/sort mrix,
+  /usr/bin/transmission-remote mrix,
+  /usr/bin/uniq mrix,
+  /usr/bin/waybar mrPx,
+  /usr/bin/wc mrix,
+  /usr/bin/{bash,dash} rix,
+  /var/lib/pacman/local/ r,
+  /var/lib/pacman/local/** r,
+  /var/lib/pacman/sync/ r,
+  /var/lib/pacman/sync/** r,
+  @{PROC}/@{pid}/net/netstat r,
+  @{PROC}/loadavg r,
+  @{system_share_dirs}/applications/*.desktop r,
+  @{system_share_dirs}/glib-[0-9]*/schemas/{,**} r,
+  @{system_share_dirs}/terminfo/** r,
+  owner /home/*/ r,
+  owner /home/*/.local/share/gnupg/ r,
+  owner /home/*/.local/share/mail/ r,
+  owner /home/*/.local/share/mail/** r,
+  owner /home/*/repos/dotfiles/applications/.local/share/applications/ r,
+  owner /home/*/repos/dotfiles/fontconfig/.config/fontconfig/fonts.conf r,
+  owner /home/*/repos/dotfiles/fonts/.local/share/fonts/ r,
+  owner /home/*/repos/dotfiles/fonts/.local/share/fonts/** r,
+  owner /home/*/repos/dotfiles/waybar/.config/waybar/ r,
+  owner /home/*/repos/dotfiles/waybar/.config/waybar/** r,
+  owner /run/user/*/dconf/ w,
+  owner /run/user/*/dconf/user rw,
+
+}

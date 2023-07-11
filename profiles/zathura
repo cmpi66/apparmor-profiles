@@ -1,0 +1,44 @@
+abi <abi/3.0>,
+
+include <tunables/global>
+
+/usr/bin/zathura {
+  include <abstractions/base>
+  include <abstractions/dbus-session-strict>
+  include <abstractions/gio-open>
+  include <abstractions/gnome>
+  include <abstractions/krathalans-networking>
+  include <abstractions/ubuntu-browsers.d/ubuntu-integration>
+
+  deny /proc/version r,
+  deny /usr/share/file/misc/magic.mgc r,
+  deny owner /proc/*/fd/ r,
+
+  /etc/passwd r,
+  /usr/bin/dbus-launch mrix,
+  /usr/bin/zathura mr,
+  /usr/local/share/icons/ r,
+  /usr/local/share/icons/hicolor/128x128/apps/ r,
+  /usr/share/icons/ r,
+  /usr/share/icons/** r,
+  /usr/share/pixmaps/ r,
+  owner /home/*/.cache/fontconfig/** r,
+  owner /home/*/.config/dconf/user r,
+  owner /home/*/.config/zathura/zathurarc r,
+  owner /home/*/.local/share/zathura/bookmarks rwk,
+  owner /home/*/.local/share/zathura/history rwk,
+  owner /home/*/.local/share/zathura/input-history rk,
+  owner /home/*/dl/reference-script-final.pdf r,
+  owner /home/*/media/** r,
+  owner /home/*/repos/dotfiles/fontconfig/.config/fontconfig/fonts.conf r,
+  owner /home/*/repos/dotfiles/fonts/.local/share/fonts/ r,
+  owner /home/*/repos/dotfiles/fonts/.local/share/fonts/** r,
+  owner /home/*/repos/dotfiles/fonts/.local/share/fonts/.uuid r,
+  owner /home/*/repos/dotfiles/gtk-3.0/.config/gtk-3.0/settings.ini r,
+  owner /home/*/repos/dotfiles/scriptsn/.local/bin/bubblewrap/seccomp_default_filter.bpf r,
+  owner /home/*/repos/dotfiles/zathura/.config/zathura/zathurarc r,
+  owner /home/*/repos/privatefiles/documents/ r,
+  owner /home/*/repos/privatefiles/documents/** r,
+  owner /run/user/1000/dconf/ w,
+
+}
