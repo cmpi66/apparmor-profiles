@@ -1,0 +1,4 @@
+owner /home/*/.local/share/lunarvim/** r,
+owner /home/*/repos/** rwl,
+owner /home/*/.local/.src/** rwl,
+capability dac_read_search,

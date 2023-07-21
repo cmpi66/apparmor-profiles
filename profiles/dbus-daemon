@@ -1,0 +1,98 @@
+# Last Modified: Thu Jul 20 19:44:30 2023
+abi <abi/3.0>,
+
+include <tunables/global>
+
+@{exec_path} = @{bin}/dbus-daemon
+
+# apparmor.d - Full set of apparmor profiles
+# Copyright (C) 2020-2022 Mikhail Morfikov
+# Copyright (C) 2021-2022 Alexandre Pujol <alexandre@pujol.io>
+# SPDX-License-Identifier: GPL-2.0-only
+
+
+profile dbus-daemon /{usr/,}{s,}bin/dbus-daemon flags=(attach_disconnected) {
+  include <abstractions/base>
+  include <abstractions/consoles>
+  include <abstractions/dbus-accessibility>
+  include <abstractions/dbus-session>
+  include <abstractions/dbus>
+  include <abstractions/nameservice-strict>
+  include <abstractions/totem>
+  include if exists <local/dbus-daemon>
+
+  capability audit_write,
+  capability setgid,
+  capability setuid,
+  capability sys_resource,
+
+  network bluetooth seqpacket,
+  network bluetooth stream,
+  network netlink raw,
+
+  signal receive set=(hup kill term) peer=at-spi-bus-launcher,
+  signal receive set=(hup kill term) peer=dbus-run-session,
+  signal receive set=(hup kill term) peer=gdm*,
+  signal send set=(hup kill term) peer=at-spi-bus-launcher,
+  signal send set=(hup kill term) peer=at-spi2-registryd,
+  signal send set=(hup kill term) peer=dconf-service,
+  signal send set=(hup kill term) peer=xdg-permission-store,
+
+  ptrace read,
+
+  /dev/dri/card[0-9]* rw,
+  /dev/input/event[0-9]* rw,
+  /dev/tty[0-9]* rw,
+  /etc/dbus-1/{,**} r,
+  /proc/*/cgroup r,
+  /proc/*/stat r,
+  /run/systemd/** r,
+  /usr/lib/dbus-1.0/dbus-daemon-launch-helper mrix,
+  /usr/lib/polkit-1/polkitd mrix,
+  /usr/share/dbus-1/{,**} r,
+  /usr/share/defaults/**.conf r,
+  /usr/share/gnome-documents/org.gnome.Documents rPx,
+  /usr/share/org.gnome.Characters/org.gnome.Characters rPx,
+  /usr/share/org.gnome.Characters/org.gnome.Characters.BackgroundService rPx,
+  /var/lib/gdm{3,}/.local/share/icc/ r,
+  /var/lib/gdm{3,}/.local/share/icc/edid-*.icc r,
+  /var/lib/snapd/dbus-1/services/{,**} r,
+  /var/lib/snapd/dbus-1/system-services/{,**} r,
+  @{PROC}/1/environ r,
+  @{PROC}/@{pids}/attr/apparmor/current r,
+  @{PROC}/@{pids}/cmdline r,
+  @{PROC}/@{pids}/mounts r,
+  @{PROC}/@{pids}/oom_score_adj rw,
+  @{PROC}/cmdline r,
+  @{PROC}/sys/kernel/osrelease r,
+  @{bin}/ r,
+  @{bin}/[a-z0-9]* rPUx,
+  @{exec_path} mr,
+  @{lib}/* rPUx,
+  @{lib}/@{multiarch}/tumbler-1/tumblerd rPUx,
+  @{lib}/@{multiarch}/xfce[0-9]/xfconf/xfconfd rPx,
+  @{lib}/atril/atrild rPx,
+  @{lib}/dbus-1*/dbus-daemon-launch-helper rPx,
+  @{lib}/gnome-shell/gnome-shell-calendar-server rPx,
+  @{lib}/ibus/ibus-* rPx,
+  @{lib}/kauth/* rPx,
+  @{lib}/kf5/kiod5 rPUx,
+  @{lib}/telepathy/mission-control-5 rPx,
+  @{lib}/xfce[0-9]/xfconf/xfconfd rPx,
+  @{lib}/{,at-spi2{,-core}/}at-spi2-registryd rPx,
+  @{run}/systemd/inhibit/[0-9]*.ref rw,
+  @{run}/systemd/sessions/*.ref rw,
+  @{run}/systemd/users/@{uid} r,
+  @{system_share_dirs}/dbus-1/services/{,**} r,
+  @{system_share_dirs}/dbus-1/{,**} r,
+  @{sys}/kernel/security/apparmor/.access rw,
+  @{sys}/kernel/security/apparmor/features/dbus/mask r,
+  @{sys}/module/apparmor/parameters/enabled r,
+  @{user_share_dirs}/icc/{,edid-*} r,
+  owner /tmp/dbus-[0-9a-zA-Z]* rw,
+  owner @{PROC}/@{pid}/fd/ r,
+  owner @{run}/user/@{uid}/dbus-1/ rw,
+  owner @{run}/user/@{uid}/dbus-1/services/ rw,
+  owner @{user_share_dirs}/dbus-1/{,**} r,
+
+}

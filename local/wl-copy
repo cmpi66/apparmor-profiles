@@ -1,0 +1,5 @@
+/usr/bin/cliphist mrix,
+owner /home/*/.cache/cliphist/db rwk,
+owner /tmp/mutt-* rw,
+capability dac_override,
+capability dac_read_search,

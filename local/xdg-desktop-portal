@@ -1,0 +1,2 @@
+owner /home/*/repos/dotfiles/user-dirs/.config/user-dirs.dirs r,
+owner /home/*/.Xauthority r,

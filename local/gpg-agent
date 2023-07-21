@@ -1,0 +1,4 @@
+owner /home/*/.local/share/gnupg/sshcontrol r,
+owner /home/*/.local/share/gnupg/private-keys-v1.d/** rw,
+owner /home/*/.local/share/gnupg/gpg-agent.conf r,
+owner /home/*/.local/share/gnupg/private-keys-v1.d/ w,

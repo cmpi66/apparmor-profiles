@@ -1,0 +1,2 @@
+owner /home/*/.local/share/.password-store/** r,
+owner /home/*/.local/share/gnupg/** rwl,

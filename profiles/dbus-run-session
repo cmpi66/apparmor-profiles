@@ -1,0 +1,40 @@
+# apparmor.d - Full set of apparmor profiles
+# Copyright (C) 2021 Alexandre Pujol <alexandre@pujol.io>
+# SPDX-License-Identifier: GPL-2.0-only
+
+abi <abi/3.0>,
+
+include <tunables/global>
+
+@{exec_path} = @{bin}/dbus-run-session
+profile dbus-run-session /{usr/,}{s,}bin/dbus-run-session {
+  include <abstractions/base>
+  include <abstractions/dconf-write>
+
+  signal (receive) set=(term, kill, hup) peer=gdm*,
+  signal (send) set=term peer=dbus-daemon,
+
+  @{exec_path} mr,
+
+  @{bin}/dbus-daemon           rPx,
+  @{bin}/gnome-session         rix,
+  @{bin}/gnome-shell           rPx,
+  @{bin}/gsettings             rPx,
+  @{lib}/gnome-session-binary  rPx,
+
+  /usr/share/glib-2.0/schemas/gschemas.compiled r,
+  /usr/share/gdm/greeter-dconf-defaults r,
+  /usr/share/dconf/profile/gdm r,
+
+  /var/lib/gdm{3,}/.config/dconf/user r,
+  /var/lib/gdm{3,}/.cache/dconf/ rw,
+  /var/lib/gdm{3,}/greeter-dconf-defaults r,
+
+  owner @{PROC}/@{pid}/fd/ r,
+
+  # file_inherit
+  /dev/tty rw,
+  /dev/tty[0-9]* rw,
+
+  include if exists <local/dbus-run-session>
+}

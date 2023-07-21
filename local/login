@@ -1,0 +1,3 @@
+owner /dev/hidraw[0-9]* rwk,
+owner /home/*/.config/Yubico/u2f_keys r,
+owner /sys/devices/** r,

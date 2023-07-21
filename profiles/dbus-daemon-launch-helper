@@ -1,0 +1,47 @@
+# Last Modified: Thu Jul 20 19:33:07 2023
+abi <abi/3.0>,
+
+include <tunables/global>
+
+@{exec_path} = @{lib}/dbus-1*/dbus-daemon-launch-helper
+
+# apparmor.d - Full set of apparmor profiles
+# Copyright (C) 2021 Alexandre Pujol <alexandre@pujol.io>
+# SPDX-License-Identifier: GPL-2.0-only
+
+
+profile dbus-daemon-launch-helper /{usr/,}lib{,exec,32,64}/dbus-1*/dbus-daemon-launch-helper {
+  include <abstractions/app-launcher-root>
+  include <abstractions/base>
+  include <abstractions/bash>
+  include <abstractions/chromium>
+  include <abstractions/nameservice-strict>
+  include <abstractions/totem>
+  include if exists <local/dbus-daemon-launch-helper>
+
+  capability setgid,
+  capability setuid,
+  capability sys_resource,
+
+  /etc/NetworkManager/dispatcher.d/10-openrc-status mrix,
+  /etc/dbus-1/{,**} r,
+  /proc/*/limits r,
+  /proc/*/stat r,
+  /proc/*/task/** r,
+  /usr/bin/bash ix,
+  /usr/lib/nm-dispatcher mrix,
+  /usr/lib/polkit-1/polkitd mrix,
+  /usr/lib/rtkit-daemon mrix,
+  /usr/share/dbus-1*/{,**} r,
+  /usr/share/hplip/pkservice.py rPx,
+  /usr/share/org.gnome.Characters/org.gnome.Characters.BackgroundService rPx,
+  /usr/share/usb-creator/usb-creator-helper rPx,
+  @{exec_path} mr,
+  @{lib}/@{multiarch}/cups-pk-helper-mechanism rPx,
+  @{lib}/kauth/* rPx,
+  @{lib}/language-selector/ls-dbus-backend rPx,
+  @{lib}/software-properties/software-properties-dbus rPx,
+  @{lib}/{,cups-pk-helper/}cups-pk-helper-mechanism rPx,
+  owner @{PROC}/@{pid}/oom_score_adj rw,
+
+}

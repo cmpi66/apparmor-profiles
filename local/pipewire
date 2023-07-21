@@ -1,0 +1,8 @@
+owner /home/*/.Xauthority r,
+owner /home/*/.local/state/** rw,
+owner /run/user/1000/pipewire-0 w,
+owner /proc/*/* r,
+/run/systemd/users/1000 r,
+/run/udev/data/+sound:card0 r,
+/sys/devices/** r,
+owner /home/*/repos/dotfiles/pipewire/.config/pipewire/pipewire.conf r,

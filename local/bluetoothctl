@@ -1,0 +1,2 @@
+owner /home/*/.cache/.bluetoothctl_** w,
+owner /home/*/repos/dotfiles/shell/.config/shell/inputrc r,
